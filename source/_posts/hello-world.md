@@ -1,5 +1,6 @@
 ---
 title: Hello World
+date: 2024-09-28 10:00:00
 ---
 Welcome to [Star's Space](https://starlit.lol/)!   
 On Sep 26th 2024, this website is created from project [Hexo](https://hexo.io/). Using theme [fluid](https://hexo.fluid-dev.com/).  
