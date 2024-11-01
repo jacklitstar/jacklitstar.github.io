@@ -116,3 +116,65 @@ pre-pruning is pruning when generating the tree. If the new branch have negative
 
 ## 4.4 Continous Properties and Missings
 
+
+# 6 Support Vector Machine
+## 6.1 
+Using a hyperplane to classify datasets.
+A **Support Vector** are points that lie around the hyperplane margin, they are the points that are hard to distinguish.  
+Hyperplane :$w^Tx+b=0$  
+The distance of a point to the hyperplane is 
+$$ r = \frac{|wx+b|}{\|w\|} $$
+The **Margin** :
+$$\gamma=\frac{2}{\|w\|}$$
+We want to maximize the margin, which is minimizing $\|w\|^2$. This is a **Convex Quadratic Progamming** problem.
+$$\min_{w,b} \frac{1}{2}\|w\|^2\quad s.t. y_i(wx_i+b)\geq 1$$
+
+## 6.2 KKT
+Consider problem: $\min_x f(x)\quad s.t.\; g_i\leq 0, h_j(x) = 0, i=1,\ldots,m \quad j=1,\ldots,n$  
+Using the Lagrangian:
+$$L(x,\mu,\lambda) = f(x) + \sum_i \mu_ig_i(x)+ \sum_j\lambda_jh_j(x)$$
+KKT conditions:
+1. Stationary $$\nabla_xL=\nabla f(x^*) + \sum_{i=1}^{m} \mu_i \nabla g_i(x^*) + \sum_{j=1}^{n} \lambda_j \nabla h_j(x^*) = 0$$
+2. Primal feasibility $$g_i(x^*)\leq 0 \;\forall i\qquad h_j(x^*) = 0 \; \forall j$$
+3. Dual feasibility $$\mu_i\geq 0,\forall i$$
+4. Complementary slackness $$\mu_ig_i(x^*)= 0\;\forall i$$
+
+Using Lagrangian and applying KKT, the SVM problem is transformed into a **dual form**
+$$\max_{\bold\alpha}\, \sum_{i=1}^m \alpha_i - \frac{1}{2}\sum_{i=1}^m\sum_{j=1}^m\alpha_i\alpha_j y_iy_jx_i^Tx_j\\s.t.\;\sum_{i=1}^m \alpha_iy_i=0 \; \alpha_i\geq 0$$
+The Stationary Gradients conditions are applied during the process.  
+**SMO** algorithm
+
+## 6.3 Kernel Function
+If the problem cannot be classifed in a low dimension space, there always exits a function $\phi(x)$ that maps to a higher dimension, ensuring that it can be classifed by superplane. Normally we use Hilbert Space. A kernel function computes the similarity (or inner product) between two data points in a higher-dimensional feature space without explicitly computing the coordinates of those points in that space. 
+$$\kappa(x_i,x_j) = \phi(x_i) \phi(x_j) $$
+
+## 6.4 Soft Margins
+We allow the SVM to make some mistakes.
+
+\[
+\min_{w, b, \xi} \quad \frac{1}{2} \|w\|^2 + C \sum_{i=1}^{N} \xi_i
+\]
+Subject to:
+\[
+y_i (w \cdot x_i + b) \geq 1 - \xi_i \quad \text{for all } i
+\]
+\[
+\xi_i \geq 0 \quad \text{for all } i
+\]
+
+Where:
+\(w\) is the weight vector,
+\(b\) is the bias term,
+\(C\) is the regularization parameter,
+\(\xi_i\) are the slack variables.
+
+Given 3 coins A B C, the possibility of flipping heads are: $\pi ,p,q$  
+Test: $$
+A = \begin{array}{}
+B & A \text{ is heads} \\
+C & A \text{ is tails}
+\end{array}
+$$
+
+Proj 7
+proof chebyshev points : $$\|f-P_n\|\leq c\rho^{-n}$$ and $$lesbegue_n(X)\leq c\log n$$
