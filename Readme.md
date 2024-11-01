@@ -4,6 +4,6 @@ This is the repository for the page. Visit Blog [here](https://blog.starlit.lol/
 
 This Blog is built with [Hexo](https://hexo.io/), using theme [fluid](https://hexo.fluid-dev.com/).  
 
-updated to ML_HW
+updated to ML_HW6, completed MLHW6.
 
 Posts are subjected to copyright.
