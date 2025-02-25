@@ -1,6 +1,6 @@
 ---
-title: Machine Learning
-date: 2024-12
+title: 数值分析教材部分修正
+date: 2024-12-30
 categories: Learn
 ---
 # Some corrections

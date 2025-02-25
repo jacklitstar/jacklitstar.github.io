@@ -1,3 +1,8 @@
+---
+title: Quantom Mechanics Week 1
+date: 2025-02-24 22:30:00
+categories: Learn
+---
 # QM Week 1 
 # 1.9 
 $$\Psi (x,t) =  A e^{-a[(mx^2/\hbar)+ it]}$$
