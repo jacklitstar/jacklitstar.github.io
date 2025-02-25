@@ -16,14 +16,15 @@ $$\frac{\partial \Psi}{\partial t} = -ia \Psi\qquad \frac{\partial^2 \Psi}{\part
 $$\therefore V(x) = 2a^2 m x^2$$
 
 ## c
-1. Since $x |\Psi|^2$ is an odd function: $$<x> = \int_{-\infty}^\infty x |\Psi|^2 dx =0$$
+1. Since $x |\Psi|^2$ is an odd function: 
+$$<x> = \int_{-\infty}^\infty x |\Psi|^2 dx =0$$
 
 2. 
 $$\begin{aligned}<x^2> &= \int_{-\infty}^\infty \Psi^* x^2 \Psi dx\\&=\int_{-\infty}^\infty A^2 x^2 \exp(-2ax^2/\hbar)dx\\&=\frac{\hbar}{4am}\end{aligned}$$
 
 3. $$<p> = m\frac{d<x>}{dt} = 0$$
-4. $$<p^2> = \int_{-\infty}^\infty  \Psi^* (-i\hbar\frac{\partial}{\partial x})^2\Psi dx=am\hbar $$
-5. $$\sigma_x^2 = <x^2> - <x>^2 =\frac{\hbar}{4am} $$ $$\sigma_p^2 = <p^2> - <p>^2 = am\hbar$$ $$\sigma_p\sigma_x = \frac{\hbar}2\geq\frac{\hbar}2 $$ Which is consistent with the uncertainty principle.
+4. $$<p^2> = \int_{-\infty}^\infty  \Psi^* (-i\hbar\frac{\partial}{\partial x})^2\Psi dx=am\hbar$$
+5. $$\sigma_x^2 = <x^2> - <x>^2 =\frac{\hbar}{4am}$$ $$\sigma_p^2 = <p^2> - <p>^2 = am\hbar$$ $$\sigma_p\sigma_x = \frac{\hbar}2\geq\frac{\hbar}2$$ Which is consistent with the uncertainty principle.
 
 # 1.14
 ## a
@@ -47,7 +48,7 @@ $$\int |\Psi|^2 dx = \int_{-a}^a A^2(a^2-x^2)^2dx =1$$ $$A = \sqrt{\frac{15}{16a
 $$<x> = \int_{-a}^a xA^2(a^2-x^2)^2dx=0$$
 ## c
 $$\begin{aligned}<p> &= \int_{-a}^a \Psi^* (-i\hbar \frac{\partial }{\partial x})\Psi dx\\
-&=\int_{-a}^a 2i\hbar A^2 x(a^2-x^2)\\&=0 \end{aligned}$$
+&=\int_{-a}^a 2i\hbar A^2 x(a^2-x^2)dx\\&=0 \end{aligned}$$
 ## d
 $$<x^2> = \int_{-a}^a x^2A^2(a^2-x^2)^2dx=\frac{a^2}{7}$$
 ## e
@@ -68,6 +69,7 @@ $$\begin{aligned}
 \frac{dP}{dt} &= \int \frac{\partial \Psi^*}{\partial x}\Psi+\Psi^* \frac{\partial \Psi}{\partial x}dx\\
 &=\int \left(\frac{-\hbar i}{2m}\frac{\partial^2 \Psi^*}{\partial x^2} + \frac{V_0i\Psi^*}{\hbar} - \frac{\Gamma \Psi^*}{\hbar}\right)\Psi + \Psi^* \left(\frac{\hbar i}{2m}\frac{\partial^2 \Psi}{\partial x^2} - \frac{V_0i\Psi}{\hbar} - \frac{\Gamma i \Psi}{\hbar}\right)dx\\
 &=\int \frac{i\hbar}{2m}\left(-\frac{\partial^2 \Psi^*}{\partial x^2}\Psi + \Psi^* \frac{\partial^2 \Psi}{\partial x^2}\right) - \frac{2\Gamma}\hbar \Psi^*\Psi dx\\
+&=\int \frac{i\hbar}{2m}\left(-\frac{\partial^2 \Psi^*}{\partial x^2}\Psi + \Psi^* \frac{\partial^2 \Psi}{\partial x^2}\right)dx - \frac{2\Gamma}\hbar \int\Psi^*\Psi dx\\
 &=- \frac{2\Gamma}\hbar P\end{aligned}$$ 
 ## b
 Solve the ODE of (a):
