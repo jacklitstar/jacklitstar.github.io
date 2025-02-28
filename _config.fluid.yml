@@ -144,7 +144,7 @@ color:
   body_bg_color: "#eee"
   # 暗色模式下的 body 背景色，下同
   # Color in dark mode, the same below
-  body_bg_color_dark: "#181c27"
+  body_bg_color_dark: "#000000"
 
   # 顶部菜单背景色
   # Color of navigation bar background
@@ -239,6 +239,7 @@ custom_js:
 # 指定自定义 .css 文件路径，用法和 custom_js 相同
 # The usage is the same as custom_js
 custom_css:
+  - /css/custom.css
 
 # 网页访问统计
 # Analysis of website visitors
