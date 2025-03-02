@@ -1,0 +1,5 @@
+/* For KaTeX formulas */
+.katex {
+    color: #ffffff !important;
+    filter: brightness(1.2) !important;
+}
