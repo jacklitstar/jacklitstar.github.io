@@ -31,8 +31,80 @@ $\hat\theta_L = \hat\theta - z_{\alpha/2} \mathrm{sd}(\hat\theta),\hat\theta_R =
 If $P(\hat\theta_L \leq \theta \leq \hat\theta_R) = 1-\alpha$, then $\hat\theta_L$ and $\hat\theta_R$ are the endpoints of a $(1-\alpha)$ confidence interval for $\theta$.
 When $n$ is large, $$P(\theta \in [\hat\theta \pm z_{\alpha/2} \mathrm{sd}(\hat\theta)]) \approx 1-\alpha$$
 
+# 4
 
+```R
+# Confidence Interval
+conf.interval=function(para.est, SD.est, alpha)
+##############    Input     ########################
+## para.est = estimator of character
+## SD.est   = estimator of sd
+## alpha    = confidence level (1-alpha)
+##############    Output    ########################
+## left     = left of confidence interval
+## right    = right of confidence interval
+####################################################
+{
+  quan=qnorm(1-alpha/2) #z_alpha/2  uppper alpha/2
+  
+  para.left = para.est-quan*SD.est
+  para.right = para.est+quan*SD.est
+  
+  return(list(left=para.left, right=para.right))
+}
 
+# Error
+dr.error=function(para.est, SD.est, alpha)
+##############    Input     ########################
+## para.est = estimator of character
+## SD.est   = estimator of sd
+## alpha    = confidence level (1-alpha)
+##############    Output    ########################
+## d        = absolute error
+## r        = relative error
+####################################################
+{
+  quan=qnorm(1-alpha/2)
+  
+  d=quan*SD.est
+  r=quan*SD.est/para.est
+
+  return(list(d=d, r=r))
+}
+```
+
+Sample Mean:
+```R
+sample.mean=function(mydata, alpha)
+##############    Input     ########################
+## mydata = srs sample vector
+## alpha = confidence level 1-alpha
+##############    Output    ########################
+## mean.est = estimator of sample mean
+## sd.est   = estimator of sample sd
+## left     = left of confidence interval
+## right    = right of confidence interval
+## d        = absolute error
+## r        = relative error
+####################################################
+{
+  size=length(mydata)
+  
+  mean.est=mean(mydata)
+  sd.est  =sqrt(var(mydata)/size)
+  
+  ci.result=conf.interval(mean.est, sd.est, alpha)
+  left =ci.result$left
+  right=ci.result$right
+  
+  dr.result=dr.error(mean.est, sd.est, alpha)
+  d=dr.result$d
+  r=dr.result$r
+  
+  return(list(mean.est=mean.est, sd.est=sd.est, 
+              left=left, right=right, d=d, r=r))
+}
+```
 
 
 
