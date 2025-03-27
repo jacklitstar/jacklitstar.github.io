@@ -107,4 +107,31 @@ sample.mean=function(mydata, alpha)
 ```
 
 
+# 5
 
+Review chp2:
+ 两大假设:
+ 1. 相合 $\hat \theta_n \xrightarrow{P}\theta,n\to \infty$
+ 2.  渐进正态 $\sqrt n(\hat \theta - \theta) \xrightarrow{d} N(0,v(\theta))$
+
+若 $\bar y$ 为 UE or UAE
+$$CI = [\bar y \plusmn z_{\frac{\alpha}2} \mathrm{var}(\bar y)]$$
+
+
+总体均值 :
+$$ \bar Y = \frac 1 N \sum_{i=1}^N Y_i $$
+总体方差 :
+$$S^2 = \frac 1 {N-1} \sum_{i=1}^N (Y_i - \bar Y)^2$$
+用样本均值估计总体均值,待估计特征$\bar Y = \theta$ 
+点估计: $$\bar y = \frac 1 n \sum_{i=1}^n y_i = \hat \theta$$
+
+示性变量: A is the picked set.
+$$\xi_i = \begin{cases}1 & \text{if } Y_i \in A\\ 0 & \text{if } Y_i \notin A \end{cases}$$
+则 $\xi_i \sim B(1,p)$, where:
+$$p = P(\xi_i =1) = n/N $$
+for 
+$$\bar y = \frac 1 n \sum_{i=1}^n y_i = \frac{1}n \sum_{i=1}^N \xi_i y_i$$
+
+方差的估计 :
+$$\hat{\mathrm{Var}} (\bar y) = \frac{1-f}{n} s^2$$
+$$s^2 = \frac 1 {n-1} \sum_{i=1}^n (y_i - \bar y)^2$$

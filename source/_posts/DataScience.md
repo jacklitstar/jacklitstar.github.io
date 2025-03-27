@@ -9,7 +9,7 @@ Notations:
 - $\theta$: parameters that controls the predictor $f$
 - $\mathbb{P}$: the joint probabilty distribution of $X$ and $Y$ on $\mathcal X \times \mathcal Y : (X,Y) \sim \mathbb P$
 - $f: \mathcal X \to \mathcal Y$: predictor
-- $\hat f  =  \frac 1 N \sum_{n=1}^N \ell(Y_n, f(X_n ; \theta))$: predictor based on the training set(sample), empirical risk minimizer
+- $\hat f  =  \argmin_{f\in \mathcal F}\frac 1 N \sum_{n=1}^N \ell(Y_n, f(X_n ; \theta))$: predictor based on the training set(sample), empirical risk minimizer
 - $f^* = \argmin_{f} \mathcal L (f)$: target function, the optimal predictor based on the true distribution $\mathbb P$
 - $\bar f = \argmin_{f \in \mathcal F}  {\mathcal L}(f)$: risk minimizer constrained in $\mathcal F$
 - $f_0$: solution of the problem
@@ -34,8 +34,8 @@ $$\mathcal L (f) = \mathrm{E} [\ell(Y, f(X))]$$
 
 Definition: **Empirical Risk**  
 The average loss of the predictor on the training set.
-$$\hat{\mathcal{L}} (\theta) = \frac 1 N \sum_{n=1}^N \ell(Y_n, f(X_n ; \theta))$$
-
+$$\hat{\mathcal{L}} (\theta) = \frac 1 N \sum_{n=1}^N \ell(Y_n, f(X_n ; \theta))$$or
+$$\hat{\mathcal{L}} (\hat f) = \frac 1 N \sum_{n=1}^N \ell(Y_n, f(X_n))$$
 In order to find the best predictor, we need to find the parameters $\theta$ that minimizes the empirical risk.
 
 Definition: **Empirical Risk Minimization**
@@ -47,7 +47,7 @@ Notice that $f$ is a function of $\theta$, we can aquire the **Emperical Risk Mi
 $$\hat f = f(X ; \hat \theta)$$
 
 or:
-$$\hat f  =  \frac 1 N \sum_{n=1}^N \ell(Y_n, f(X_n ; \theta))$$
+$$\hat f  = \argmin_{f\in\mathcal F}\frac 1 N \sum_{n=1}^N \ell(Y_n, f(X_n))$$
 
 Definition **Hypothesis Sapce**
 The hypothesis space $\mathcal F $ is a set of achievable functions that maps $\mathcal X\to \mathcal Y$ .
@@ -65,7 +65,7 @@ $$f^*(x) = \argmin_{a\in\mathcal Y}\mathbb E[\ell(Y,a) | X =x]$$
 
 Definition: **Bayes Decision Function** 
 A Bayes Decision Function $f^* : X \to Y$ is a function that achieves the *minimal risk*  among all possible functions:
-$$\mathcal L(f^*) = \inf_f \mathbb E [\ell(Y,f(X))]$$
+$$\mathcal L(f^*) = \inf_f \mathbb E [\ell(Y,f(X))]$$Unlike $\hat f$ and $\bar f$, $f^*$ is not limited in $\mathcal F$
 
 Rewind: The empirical risk focus on the training set, which may not match the distribution $\mathbb P$ in the total set. The population risk focus on the total set with distribution $\mathbb P$.  
 Assume the distribution of the training set is $\mathbb D_{train}$ , denote the empirical risk as 
@@ -76,9 +76,9 @@ $$\mathcal L(\theta;\mathbb P) =\mathbb E_{(X,Y)\sim \mathbb P}[\ell(Y,f(X;\thet
 
 The difference between the empirical risk and the population risk is called the **Generalization Gap** :
 $$\mathcal L(\theta;\mathbb P) - \hat{\mathcal L}(\theta;\mathbb D_{train})$$or :
-$$\mathcal L(f) -\hat{\mathcal L}(f)$$
+$$\mathcal L(\hat f) -\hat{\mathcal L}(\hat f)$$
 
-In reality, we don't know the actuall distribution $\mathbb P$, so we have to split the data into two(actually 3) subsets, the training set and the **test set**. We can only estimate the population risk according to the test set with distribution $\mathbb D_{test}$. Approximate the population risk with the test set as the **Test Risk** :
+In practice, we don't know the actuall distribution $\mathbb P$, so we have to split the data into two(actually 3) subsets, the training set and the **test set**. We can only estimate the population risk according to the test set with distribution $\mathbb D_{test}$. Approximate the population risk with the test set as the **Test Risk** :
 $$\mathcal L(\theta;\mathbb D_{test})$$
 
 Our goal is to find the best predictor based on the training set. We denote the optimal predictor as $f^*$, its risk $\mathcal L (f^*)$ is the theoretically minimal achievable risk. We want our expected risk $\mathcal L(\hat f)$ to be as close to $f^*$ as possible. The **excess risk** is the difference between the expected risk and the optimal risk:
@@ -126,17 +126,20 @@ Define the **Risk minimizer in $\mathcal F$** as :
 $$\bar f = \argmin_{f \in \mathcal F}  {\mathcal L}(f) = \argmin_{f \in \mathcal F}\mathbb E[\ell(Y,f(X))]$$ $\bar f$ is an approximation of $f^*$ in $\mathcal F$. 
 
 Now we have $f^*, \hat f, \bar f$
+
+![](../img/datascience/2.png)
+
 1. **Approximation Error** 
    Define the **approximation error**:$$\varepsilon_{\text{app}} := \varepsilon(\bar f) = \mathcal L (\bar f) - \mathcal L(f^*)$$ This error measures the gap between the best possible function in $\mathcal F$ and the optimal predictor $f^*$ . It is the penalty for restricting to $\mathcal F$ rather than all possible functions. If $\mathcal F$ is too small and limited, the approximation error can be large. If $\mathcal F$ is large enough, the approximation error can be small.
    - Since $\hat{\mathcal L}(f_{\mathcal A (\tau)}) \leq \hat{\mathcal L}(\hat f) +\tau$ and $\hat{\mathcal L}(\hat f)\leq \hat{\mathcal L}(\bar f) $ we have
   $$\begin{aligned}\hat{\mathcal L}(f_{\mathcal A (\tau)})  -\tau &\leq \hat{\mathcal L}(\hat f)\\\hat{\mathcal L}(f_{\mathcal A (\tau)})  -\tau - \hat{\mathcal L}( f^*) &\leq \hat{\mathcal L}(\hat f)- \hat{\mathcal L}( f^*)\leq \hat{\mathcal L}(\bar f)- \hat{\mathcal L}( f^*)\\\hat{\mathcal L}(f_{\mathcal A (\tau)}) - \hat{\mathcal L}(\bar f)&\leq \tau\\\hat{\mathcal L}(f_{\mathcal A (\tau)}) - \hat{\mathcal L}(\bar f) +\mathcal L (\bar f) - \mathcal L (f^*)&\leq \tau + \varepsilon_{\text{app}}\\\end{aligned}$$
    - Taking the expectation we get: $$2\mathbb E_{\mathbb D}[\hat{\mathcal L}(f_{\mathcal A (\tau)})  - {\mathcal L}( f^*)] \leq 2\varepsilon_{\text{app}} + 2\tau$$
-2. **Statistical Error** 
+1. **Statistical Error** 
    Define $$\varepsilon_{\text{sta}}: = \mathbb E_{\mathbb D}[{\mathcal L}(f_{\mathcal A (\tau)})  + {\mathcal L}( f^*) - 2 \hat{\mathcal L}(f_{\mathcal A (\tau)})]$$ as the **statistical error**. This measures how well the empirical risk $\hat {\mathcal L} (f_{\mathcal A (\tau)})$ approximates the true risk $\mathcal L (f_{\mathcal A (\tau)})$.
    - Now we get : $$\begin{aligned} \mathbb E_{\mathbb D}[\varepsilon(f_{\mathcal A (\tau)})] & = \mathbb E_{\mathbb D}[{\mathcal L}(f_{\mathcal A (\tau)}) - \mathcal L(f^*)]\\&\leq \varepsilon_{\text{sta}} + 2\varepsilon_{\text{app}} + 2\tau\end{aligned}$$
-3. **Optimization Error**
+2. **Optimization Error**
    Define $$\varepsilon_{\text{opt}}:=\hat{\mathcal{L}}(f_{\mathcal A (\tau)}) - \hat{\mathcal{L}}(\hat{f})$$ as the **optimization error**. This accounts for the suboptimality introduced by the solver, which does not reach the exact minimum of $\hat {\mathcal L} (\hat f)$ 
-4. **Estimation Error**
+3. **Estimation Error**
    Define $$\varepsilon_{\text{est}}:={\mathcal{L}}(\hat f) - \mathcal{L}(\bar f)$$ as the **estimation error**. It is the performance hit for choosing $f$ using finite training data, is the performance hit for using empirical risk rather than true risk.
 
 
