@@ -133,7 +133,7 @@ $$\begin{aligned}\varepsilon(\hat f) &:= \mathcal L(\hat f) - \mathcal L (f^*)\\
 2. **Estimation Error**
    Define $$\varepsilon_{\text{est}}:={\mathcal{L}}(\hat f) - \mathcal{L}(\bar f)$$ as the **estimation error**. It is the performance hit for choosing $f$ using finite training data, is the performance hit for using empirical risk rather than true risk.
 
-![](../img/datascience/0.png)
+![](/img/datascience/0.png)
 
 Let us consider the following decomposition of the estimation error:
 $$\begin{aligned}{\mathcal{L}}(\hat f) - \mathcal{L}(\bar f) &= {\mathcal{L}}(\hat f) - \hat{\mathcal{L}}(\hat f) +\underbrace{\hat{\mathcal{L}}(\hat f) - \hat{\mathcal{L}}(\bar f)}_{\leq 0} +\hat{\mathcal{L}}(\bar f) - \mathcal{L}(\bar f)\\&\leq{\mathcal{L}}(\hat f) - \hat{\mathcal{L}}(\hat f) +\hat{\mathcal{L}}(\bar f) - \mathcal{L}(\bar f)\end{aligned}$$
@@ -157,7 +157,7 @@ it measures how far the approximation $f_{\mathcal A (\tau)}$ is from the optima
 
 By combining the above terms, we derive:
 $$\underbrace{\mathcal{L}(f_{\mathcal A(\tau)}) - \mathcal{L}(f^*)}_{\text{Excess Risk}} = \underbrace{\mathcal{L}(f_{\mathcal A(\tau)}) - \mathcal{L}(\hat{f})}_{\text{Optimization Error}}+\underbrace{\mathcal{L}(\hat f) - \mathcal{L}(\bar f)}_{\text{Estimation Error}} + \underbrace{\mathcal{L}(\bar{f}) - \mathcal{L}(f^*)}_{\text{Approximation Error}} $$
-![](../img/datascience/2.png)
+![](/img/datascience/2.png)
 
 
 
@@ -172,10 +172,3 @@ We can bound the expectation of the excess risk as:
 $$\mathbb E_{\mathbb D}[\varepsilon(f_{\mathcal A (\tau)})] \leq \underbrace{2\sup_{f\in\mathcal F}|\mathcal L(f) - \hat{\mathcal L} (f)|}_{\varepsilon_{\text{sta}}} +\underbrace{\inf_{f\in\mathcal F}|{\mathcal{L}(f) - \mathcal{L}(f^*)|}}_{\varepsilon_{\text{app}}} + \underbrace{\hat{\mathcal{L}}(f_{\mathcal A (\tau)}) - \hat{\mathcal{L}}(\hat{f})}_{\varepsilon_{\text{opt}}}$$
 
 ## Ordinary least square for fixed design liner regression
-
-
-
-
-
-
-
