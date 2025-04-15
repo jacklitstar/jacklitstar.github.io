@@ -239,6 +239,6 @@ F\end{bmatrix}
 \end{bmatrix}
 $$
 
-$$T = \frac{|F|^2}{|A|^2} = |F^2|$$
+$$T = \frac{|F|^2}{|A|^2} = |F|^2$$
 
 这周作业是我抄答案都懒得抄完的level. 最后两题对着答案写的都写不明白 , 用 mathematica 倒腾半天才算出来. 🥲🥲🥲
