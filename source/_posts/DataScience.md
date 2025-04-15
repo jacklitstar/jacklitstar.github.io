@@ -115,36 +115,59 @@ Where $Z$ follows probability measure $\mu_Z$: $Z\sim \mu_Z$ , with the support 
 Define the **ERM over $\mathcal F$** :
 $$\hat f(x) = \argmin_{f \in \mathcal F} \hat {\mathcal L}(f) = \frac 1 N \sum_{i=1}^N \ell(Z_i,f(Z_i))$$
 
-Instead of exactly solving the ERM for $\hat f$, we use an algorithm or a solver. Given an algorithm $\mathcal A(\tau)$ that will output an approximate solution $f_{\mathcal A (\tau)}$ s.t. 
-$$\hat{\mathcal L}(f_{\mathcal A (\tau)}) \leq \hat{\mathcal L}(\hat f) +\tau$$where $\tau > 0 $ is an **optimization tolerance** .
+
 ### Excess Risk Decomposition
+#### Standard Decomposition 
+The standard decomposition of the excess risk is the theoretical decomposition, later we will explain the method in practice.
+
+Define the **Risk minimizer in $\mathcal F$** as :
+$$\bar f = \argmin_{f \in \mathcal F}  {\mathcal L}(f) = \argmin_{f \in \mathcal F}\mathbb E[\ell(Y,f(X))]$$ $\bar f$ is an approximation of $f^*$ in $\mathcal F$. 
+Now we have $f^*, \hat f, \bar f$
+The excess risk is defined as:
+$$\varepsilon(\hat f) := \mathcal L(\hat f) - \mathcal L (f^*)$$
+Firstly, under ERM, with good approximation we have:
+$$\begin{aligned}\varepsilon(\hat f) &:= \mathcal L(\hat f) - \mathcal L (f^*)\\&=\underbrace{\mathcal L(\hat f) - \mathcal L (\bar f)}_{\text{Estimation Error}} + \underbrace{\mathcal L (\bar f) - \mathcal L(f^*)}_{\text{Approximation Error}}\end{aligned}$$
+
+1. **Approximation Error** 
+   Define the **approximation error**:$$\varepsilon_{\text{app}} := \varepsilon(\bar f) = \mathcal L (\bar f) - \mathcal L(f^*)$$ This error measures the gap between the best possible function in $\mathcal F$ and the optimal predictor $f^*$ . It is the penalty for restricting to $\mathcal F$ rather than all possible functions. If $\mathcal F$ is too small and limited, the approximation error can be large. If $\mathcal F$ is large enough, the approximation error can be small.
+2. **Estimation Error**
+   Define $$\varepsilon_{\text{est}}:={\mathcal{L}}(\hat f) - \mathcal{L}(\bar f)$$ as the **estimation error**. It is the performance hit for choosing $f$ using finite training data, is the performance hit for using empirical risk rather than true risk.
+
+![](../img/datascience/0.png)
+
+Let us consider the following decomposition of the estimation error:
+$$\begin{aligned}{\mathcal{L}}(\hat f) - \mathcal{L}(\bar f) &= {\mathcal{L}}(\hat f) - \hat{\mathcal{L}}(\hat f) +\underbrace{\hat{\mathcal{L}}(\hat f) - \hat{\mathcal{L}}(\bar f)}_{\leq 0} +\hat{\mathcal{L}}(\bar f) - \mathcal{L}(\bar f)\\&\leq{\mathcal{L}}(\hat f) - \hat{\mathcal{L}}(\hat f) +\hat{\mathcal{L}}(\bar f) - \mathcal{L}(\bar f)\end{aligned}$$
+Ideally, we would like to be able to derive bounds for the quantities on the right hand side of the previous inequality. However, this is not an easy task as the action $\hat f$
+is possibly a very involved function of the random sample. **Uniform learning** is a learning paradigm that circumvents this problem by taking the supremum in the above inequality over all possible $f$ in $\mathcal F$, namely,
+$${\mathcal{L}}(\hat f) - \mathcal{L}(\bar f) \leq \sup_{f\in \mathcal F}\{{\mathcal{L}}( f) - \hat{\mathcal{L}}( f)\} + \sup_{f\in \mathcal F}\{\hat{\mathcal{L}}( f) - \mathcal{L}( f)\}$$
+
+#### Decomposition With Algorithm
+
+Instead of exactly solving the ERM for $\hat f$ , in practice we use an algorithm or a solver. Given an algorithm $\mathcal A(\tau)$ that will output an approximate solution $f_{\mathcal A (\tau)}$ s.t. 
+$$\hat{\mathcal L}(\hat f)\leq\hat{\mathcal L}(f_{\mathcal A (\tau)}) \leq \hat{\mathcal L}(\hat f) +\tau$$where $\tau > 0 $ is an **optimization tolerance** .
+
 The excess risk can be defined as:
 $$\varepsilon(f_{\mathcal A (\tau)}) := {\mathcal L}(f_{\mathcal A (\tau)}) - \mathcal L(f^*)$$
 it measures how far the approximation $f_{\mathcal A (\tau)}$ is from the optimal solution $f^*$. We want to bound $\mathbb E_{\mathbb D}[\varepsilon(f_{\mathcal A (\tau)})]$
 
-Define the **Risk minimizer in $\mathcal F$** as :
-$$\bar f = \argmin_{f \in \mathcal F}  {\mathcal L}(f) = \argmin_{f \in \mathcal F}\mathbb E[\ell(Y,f(X))]$$ $\bar f$ is an approximation of $f^*$ in $\mathcal F$. 
 
-Now we have $f^*, \hat f, \bar f$
 
+3. **Optimization Error**
+   Define $$\varepsilon_{\text{opt}}:={\mathcal{L}}(f_{\mathcal A (\tau)}) - {\mathcal{L}}(\hat{f})$$ as the **optimization error**. This accounts for the suboptimality introduced by the solver, which does not reach the exact minimum of $\hat {\mathcal L} (\hat f)$ 
+
+By combining the above terms, we derive:
+$$\underbrace{\mathcal{L}(f_{\mathcal A(\tau)}) - \mathcal{L}(f^*)}_{\text{Excess Risk}} = \underbrace{\mathcal{L}(f_{\mathcal A(\tau)}) - \mathcal{L}(\hat{f})}_{\text{Optimization Error}}+\underbrace{\mathcal{L}(\hat f) - \mathcal{L}(\bar f)}_{\text{Estimation Error}} + \underbrace{\mathcal{L}(\bar{f}) - \mathcal{L}(f^*)}_{\text{Approximation Error}} $$
 ![](../img/datascience/2.png)
 
-1. **Approximation Error** 
-   Define the **approximation error**:$$\varepsilon_{\text{app}} := \varepsilon(\bar f) = \mathcal L (\bar f) - \mathcal L(f^*)$$ This error measures the gap between the best possible function in $\mathcal F$ and the optimal predictor $f^*$ . It is the penalty for restricting to $\mathcal F$ rather than all possible functions. If $\mathcal F$ is too small and limited, the approximation error can be large. If $\mathcal F$ is large enough, the approximation error can be small.
+
+
    - Since $\hat{\mathcal L}(f_{\mathcal A (\tau)}) \leq \hat{\mathcal L}(\hat f) +\tau$ and $\hat{\mathcal L}(\hat f)\leq \hat{\mathcal L}(\bar f) $ we have
   $$\begin{aligned}\hat{\mathcal L}(f_{\mathcal A (\tau)})  -\tau &\leq \hat{\mathcal L}(\hat f)\\\hat{\mathcal L}(f_{\mathcal A (\tau)})  -\tau - \hat{\mathcal L}( f^*) &\leq \hat{\mathcal L}(\hat f)- \hat{\mathcal L}( f^*)\leq \hat{\mathcal L}(\bar f)- \hat{\mathcal L}( f^*)\\\hat{\mathcal L}(f_{\mathcal A (\tau)}) - \hat{\mathcal L}(\bar f)&\leq \tau\\\hat{\mathcal L}(f_{\mathcal A (\tau)}) - \hat{\mathcal L}(\bar f) +\mathcal L (\bar f) - \mathcal L (f^*)&\leq \tau + \varepsilon_{\text{app}}\\\end{aligned}$$
    - Taking the expectation we get: $$2\mathbb E_{\mathbb D}[\hat{\mathcal L}(f_{\mathcal A (\tau)})  - {\mathcal L}( f^*)] \leq 2\varepsilon_{\text{app}} + 2\tau$$
-1. **Statistical Error** 
+4. **Statistical Error** 
    Define $$\varepsilon_{\text{sta}}: = \mathbb E_{\mathbb D}[{\mathcal L}(f_{\mathcal A (\tau)})  + {\mathcal L}( f^*) - 2 \hat{\mathcal L}(f_{\mathcal A (\tau)})]$$ as the **statistical error**. This measures how well the empirical risk $\hat {\mathcal L} (f_{\mathcal A (\tau)})$ approximates the true risk $\mathcal L (f_{\mathcal A (\tau)})$.
    - Now we get : $$\begin{aligned} \mathbb E_{\mathbb D}[\varepsilon(f_{\mathcal A (\tau)})] & = \mathbb E_{\mathbb D}[{\mathcal L}(f_{\mathcal A (\tau)}) - \mathcal L(f^*)]\\&\leq \varepsilon_{\text{sta}} + 2\varepsilon_{\text{app}} + 2\tau\end{aligned}$$
-2. **Optimization Error**
-   Define $$\varepsilon_{\text{opt}}:=\hat{\mathcal{L}}(f_{\mathcal A (\tau)}) - \hat{\mathcal{L}}(\hat{f})$$ as the **optimization error**. This accounts for the suboptimality introduced by the solver, which does not reach the exact minimum of $\hat {\mathcal L} (\hat f)$ 
-3. **Estimation Error**
-   Define $$\varepsilon_{\text{est}}:={\mathcal{L}}(\hat f) - \mathcal{L}(\bar f)$$ as the **estimation error**. It is the performance hit for choosing $f$ using finite training data, is the performance hit for using empirical risk rather than true risk.
 
-
-Denote the result of our algorithm $f_{\mathcal A(\tau)}$ as $f$ and by combining the above terms, we derive:
-$$\underbrace{\mathcal{L}(f) - \mathcal{L}(f^*)}_{\text{Excess Risk}} = \underbrace{\mathcal{L}(f) - \mathcal{L}(\hat{f})}_{\text{Optimization Error}}+\underbrace{\mathcal{L}(\hat f) - \mathcal{L}(\bar f)}_{\text{Estimation Error}} + \underbrace{\mathcal{L}(\bar{f}) - \mathcal{L}(f^*)}_{\text{Approximation Error}} $$
 We can bound the expectation of the excess risk as:
 $$\mathbb E_{\mathbb D}[\varepsilon(f_{\mathcal A (\tau)})] \leq \underbrace{2\sup_{f\in\mathcal F}|\mathcal L(f) - \hat{\mathcal L} (f)|}_{\varepsilon_{\text{sta}}} +\underbrace{\inf_{f\in\mathcal F}|{\mathcal{L}(f) - \mathcal{L}(f^*)|}}_{\varepsilon_{\text{app}}} + \underbrace{\hat{\mathcal{L}}(f_{\mathcal A (\tau)}) - \hat{\mathcal{L}}(\hat{f})}_{\varepsilon_{\text{opt}}}$$
 
