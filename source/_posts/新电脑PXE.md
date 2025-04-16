@@ -16,8 +16,6 @@ categories: Diary
 
 选择 X670E 主板是因为 AM5 系列的 PCIe 通道问题, 见 [AMD 官网](https://www.amd.com/zh-cn/products/processors/desktops/ryzen/9000-series/amd-ryzen-7-9700x.html)
 
-
-
 Additional Usable PCIe Lanes from Motherboard:
 |Chipset|	PCIe Lanes|
 |---|---|
@@ -85,7 +83,7 @@ B650	|8x Gen4
     /etc/init.d/dnsmasq restart
     ```
     也可以直接在 `/etc/config/dhcp` 中添加这三行:
-    ```
+    ```text
     config dhcp 'lan'
         ###
 
@@ -126,7 +124,7 @@ B650	|8x Gen4
 省流: 对于 Windows 11 官方 iso , iVentoy 同样会遇到安装驱动弹窗问题. 可以尝试魔改 ISO.
 
 iVentoy 是一个轻量的 PXE 服务器, [官方网站](https://www.iventoy.com/), [下载地址](https://github.com/ventoy/PXE/releases)
-iVentoy 相比 Windows Server WDS 简单太多, 根本不需要 Server 操作系统, 普通的 Windows 安装即可. 配置起来也十分方便, 不到五分钟便能走完 WDS 上面全部的流程. 
+iVentoy 相比 Windows Server WDS 简单太多, 根本不需要 Server 操作系统, 普通的 Windows 安装即可. 配置起来也十分方便, 不到五分钟便能走完 WDS 上面全部的流程. B站上有很详细的教程一步步走下来就行.
 iVentoy 的缺点就是没法直接注入启动, 它的驱动注入方式是通过直接拷贝一个文件夹到你的**X**盘根目录让你自己装, 但是对于那些关键的驱动来说没有注入压根就没法正常使用. 如 AMD Raid 驱动.
 
 使用 iVentoy  时遇到了奇怪的 BUG, 使用自己魔改的大容量 iso 时候文件需要修改一些很深的存储参数, 一直失败就没继续尝试了. 因为一直失败就尝试使用 **微PE** 制作一个 PE 镜像, 在 PE 镜像中放入 Windows 的安装文件. 但是最终并不能成功, 我猜测是因为 PE 系统没办法载入 AMD Raid 驱动导致没法正确处理文件系统. 具体尝试记录如下:
@@ -139,20 +137,20 @@ iVentoy 的缺点就是没法直接注入启动, 它的驱动注入方式是通�
 3. 使用 dism 命令处理 `WEPE64.wim`
     - 在 `WEPE64.wim` 所在的文件夹启动 powershell
     - 创建一个挂载文件夹, 这里直接放在 C 盘
-      ```
+      ```bash
       mkdir C:\Mount
       ```
     - 查看 `WEPE64.wim` 的 index 信息
-      ```
+      ```bash
       dism /get-wiminfo /wimfile:"boot.wim"
       ```
     - 挂载 `WEPE64.wim` 到 `C:\Mount`
-      ```
+      ```bash
       dism /mount-wim /wimfile:"boot.wim" /index:2 /mountdir:"C:\Mount"
       ```
     - 将你的 windows iso 复制到`Program Files`中
     - 保存提交并退出
-       ```
+       ```bash
        dism /unmount-wim /mountdir:"C:\Mount" /commit
        ```
        新的 `WEPE64.wim` 会存放在你的当前文件夹中
@@ -178,12 +176,32 @@ iVentoy 的缺点就是没法直接注入启动, 它的驱动注入方式是通�
 ## 回到起点 WDS
 最后还是回到了 WDS , 因为 iVentoy 在传输上貌似并不可靠, 我也懒得钻研具体原因了. 本来我都想摆烂了直接WDS装 Win 10, 下了个 Windows 10 的 ISO后挂载配置到 WDS 上, 结果发现您猜怎么着 - Windows 10 的 ISO 没有 `install.wim` , 不知道是我下载源的问题还是啥, 我可是从微软官网下载的 Windows 安装介质, 再用那个程序下载的镜像啊! 就死马当活马医了, 直接使用 Windows 10 的 `boot.wim` 和 Windows 11 的 `install.wim`, 结果就成了! 这这这.. 微软官网怎么骗人啊, [WDS boot.wim support](https://learn.microsoft.com/en-us/windows/deployment/wds-boot-support) 这篇文章中的表格中明确写了 Windows 11 无法用 Windows 10 的 `boot.wim` , 但是实验下来发现是可以安装的.
 
-# Windows 安装
+# Windows 安装与设置
 ## 本地账户创建
 在能成功见到安装界面并且一路点"下一步"后发现, 用户名变成了微软账号邮箱的前五位. 例如你的微软账号邮箱是 `genshin@impact.com` , 那么你的Windows用户名会变成 **gensh** , 并且你的个人文件夹的名字也会是这个 `C:\users\gensh` . 这是不能接受的, 要知道多少软件的配置都会用到这个目录, 每次打开 cmd 看到这个目录名字简直跟是受不了. 那些用 qq 邮箱的人的用户名更是成了自己 qq 号的前五位... 于是只能重装系统. 安装过程中在选择计算机给谁用的一步记得选择**给学校或域**用, 然后就能创建本地账户了. 选择自己用就强制你登录微软账号. 源自[keeemf](https://space.bilibili.com/604105730)在[这个视频](https://www.bilibili.com/video/BV1R2Z2YgEg2)下的评论.
 
 ## 激活
 几种方法:
 1. 从微软官方购买对应版本的激活码
-2. KMS 激活, 你的网络上有一台 KMS 服务器. 如 Openwrt 的服务中安装 KMS 插件. 配置服务器[密钥](https://learn.microsoft.com/zh-cn/windows-server/get-started/kms-client-activation-keys)即可.
+2. KMS 激活, 你的网络上有一台 KMS 服务器. 如 Openwrt 的服务中安装 KMS 插件. 配置服务器[密钥](https://learn.microsoft.com/zh-cn/windows-server/get-started/kms-client-activation-keys)即可. 不建议使用第三方 KMS 服务器.
 3. 各凭本事
+
+## 设置系统
+### 配置工具
+Windows 11 更改了一些使用习惯上的东西, 让老人嘉用起来很别扭, 必须给改回来! 这里推荐几个初始配置工具.
+1. 图吧工具箱
+    能轻松更改电脑中那些需要改注册表的配置, 如去掉桌面快捷方式小箭头, 删除 OneDrive, 资源管理器打开默认为 Win xp "我的电脑" 界面, 去掉系统牛皮藓等. 它包括了很多实用工具, 如 Crystal Disk Mark 检测硬盘, HW Monitor 检测硬件信息等等. 缺点就是需要更改系统地区使用中文编码打开, 用 UTF8 会乱码.
+2. DISM++
+    可以通过图形界面完成上面那些 dism 指令操作, 同样可以修改一些系统设置.
+3. 软件管家
+    任何的软件管家都行, 如联想,腾讯,360, 反正用完了就删了. 下载一大堆系统必备应用使用一个软件管家还是很方便的. 还能顺带安装一些依赖如  .NET , C++ 等.
+
+
+### 软件推荐
+- everything 搜索你电脑上的任何东西
+- potplayer 媒体播放器
+- 360 压缩 居然没有广告的压缩包软件
+- bandzip 压缩包软件, 以前很推荐但是现在有广告了
+- ffmpeg 命令行处理媒体文件
+- 原神
+
